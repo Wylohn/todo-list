@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:5000/api
+@todoId = 679ecdff0a708276ba9426de
+@authToken = YOUR_JWT_TOKEN_HERE
+
+### ------------- Authentication -------------
+
+### 1. Créer un nouvel utilisateur
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+}
+
+### 2. Se connecter
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+}
+
+### ------------- Todo Operations -------------
+
+### 3. Créer une nouvelle todo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "title": "Apprendre MongoDB"
+}
+
+### 4. Récupérer toutes les todos
+GET {{baseUrl}}/todos
+Authorization: Bearer {{authToken}}
+
+### 5. Mettre à jour une todo
+PUT {{baseUrl}}/todos/{{todoId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "title": "Apprendre MongoDB et Express"
+}
+
+### 6. Basculer le statut completed
+PATCH {{baseUrl}}/todos/{{todoId}}/toggle
+Authorization: Bearer {{authToken}}
+
+### 7. Supprimer une todo
+DELETE {{baseUrl}}/todos/{{todoId}}
+Authorization: Bearer {{authToken}}
+
+### -------------
