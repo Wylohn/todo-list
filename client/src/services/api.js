@@ -21,8 +21,6 @@ export const todoApi = {
   update: (id, todo) =>
     axios.put(`${API_URL}/todos/${id}`, todo).catch(handleApiError),
   delete: (id) => axios.delete(`${API_URL}/todos/${id}`).catch(handleApiError),
-  toggle: (id) =>
-    axios.patch(`${API_URL}/todos/${id}/toggle`).catch(handleApiError),
 };
 
 export const authApi = {

@@ -8,6 +8,12 @@ const todoSchema = Joi.object({
     "string.max": "Le titre ne peut pas dépasser 100 caractères",
   }),
   category: Joi.string().valid("A faire", "En cours", "Terminé"),
+  label: Joi.string().valid(
+    "Quotidien",
+    "Hebdomadaire",
+    "Mensuel",
+    "Occasionnel"
+  ),
 });
 
 // Validation du schéma User

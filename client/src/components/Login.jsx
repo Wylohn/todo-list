@@ -9,6 +9,7 @@ export default function Login({ onLoginSuccess }) {
   });
   const [error, setError] = useState("");
 
+  // In Login.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

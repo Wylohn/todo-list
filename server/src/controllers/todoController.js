@@ -14,6 +14,7 @@ exports.createTodo = async (req, res) => {
     const todo = new Todo({
       title: req.body.title,
       category: req.body.category || "A faire",
+      label: req.body.label || "Occasionnel",
     });
     const newTodo = await todo.save();
     res.status(201).json(newTodo);
@@ -41,6 +42,7 @@ exports.updateTodo = async (req, res) => {
       {
         title: req.body.title,
         category: req.body.category,
+        label: req.body.label,
       },
       { new: true }
     );
@@ -48,20 +50,6 @@ exports.updateTodo = async (req, res) => {
       return res.status(404).json({ message: "Todo not found" });
     }
     res.json(todo);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-exports.toggleTodo = async (req, res) => {
-  try {
-    const todo = await Todo.findById(req.params.id);
-    if (!todo) {
-      return res.status(404).json({ message: "Todo not found" });
-    }
-    todo.completed = !todo.completed;
-    const updatedTodo = await todo.save();
-    res.json(updatedTodo);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -8,7 +8,6 @@ const auth = require("../middleware/auth");
 router.get("/", auth, todoController.getAllTodos);
 router.post("/", [auth, validator(todoSchema)], todoController.createTodo);
 router.put("/:id", [auth, validator(todoSchema)], todoController.updateTodo);
-router.patch("/:id/toggle", auth, todoController.toggleTodo);
 router.delete("/:id", auth, todoController.deleteTodo);
 
 module.exports = router;

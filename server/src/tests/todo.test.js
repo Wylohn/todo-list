@@ -8,47 +8,34 @@ const jwt = require("jsonwebtoken");
 
 let mongoServer;
 let token;
+let testUser;
 
-beforeEach(async () => {
-  await Todo.deleteMany({});
-  await User.deleteMany({});
+beforeAll(async () => {
+  // Setup MongoDB Memory Server
+  mongoServer = await MongoMemoryServer.create();
+  await mongoose.connect(mongoServer.getUri());
 
-  const user = await User.create({
+  // Create test user and generate token
+  testUser = await User.create({
     username: "testuser",
     password: "password123",
   });
 
   token = jwt.sign(
-    { userId: user._id },
+    { userId: testUser._id },
     process.env.JWT_SECRET || "your-secret-key",
     { expiresIn: "1h" }
   );
 });
 
-beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-
-  // Créer un utilisateur de test et générer un token
-  const user = await User.create({
-    username: "testuser",
-    password: "password123",
-  });
-
-  token = jwt.sign(
-    { userId: user._id },
-    process.env.JWT_SECRET || "your-secret-key",
-    { expiresIn: "1h" }
-  );
+beforeEach(async () => {
+  // Clean collections before each test
+  await Todo.deleteMany({});
 });
 
 afterAll(async () => {
   await mongoose.disconnect();
   await mongoServer.stop();
-});
-
-beforeEach(async () => {
-  await Todo.deleteMany({});
 });
 
 describe("Todo API", () => {
@@ -76,7 +63,6 @@ describe("Todo API", () => {
 
       expect(res.status).toBe(201);
       expect(res.body.title).toBe("New todo");
-      expect(res.body.completed).toBe(false);
 
       const todo = await Todo.findById(res.body._id);
       expect(todo).toBeTruthy();
@@ -91,6 +77,7 @@ describe("Todo API", () => {
 
       expect(res.status).toBe(400);
     });
+
     it("should create a todo with category", async () => {
       const res = await request(app)
         .post("/api/todos")

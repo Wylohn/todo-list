@@ -9,7 +9,6 @@ import {
   CardContent,
   CardActions,
   Grid,
-  Checkbox,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddTodoForm from "./AddTodoForm";
@@ -48,7 +47,6 @@ export default function TodoList() {
     const todoId = e.dataTransfer.getData("todoId");
     try {
       const todoToUpdate = todos.find((todo) => todo._id === todoId);
-      // Only send title and category in the update
       await todoApi.update(todoId, {
         title: todoToUpdate.title,
         category: category,
@@ -56,15 +54,6 @@ export default function TodoList() {
       fetchTodos();
     } catch (error) {
       console.error("Error updating todo category:", error);
-    }
-  };
-
-  const handleToggleTodo = async (id) => {
-    try {
-      const response = await todoApi.toggle(id);
-      setTodos(todos.map((todo) => (todo._id === id ? response.data : todo)));
-    } catch (error) {
-      console.error("Error toggling todo:", error);
     }
   };
 
@@ -110,22 +99,10 @@ export default function TodoList() {
                     onDragStart={(e) => handleDragStart(e, todo._id)}
                   >
                     <CardContent sx={{ pb: 0 }}>
-                      <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Checkbox
-                          checked={todo.completed}
-                          onChange={() => handleToggleTodo(todo._id)}
-                        />
-                        <Typography
-                          sx={{
-                            textDecoration: todo.completed
-                              ? "line-through"
-                              : "none",
-                            color: todo.completed
-                              ? "text.secondary"
-                              : "text.primary",
-                          }}
-                        >
-                          {todo.title}
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <Typography>{todo.title}</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {todo.label}
                         </Typography>
                       </Box>
                     </CardContent>

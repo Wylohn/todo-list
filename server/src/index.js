@@ -1,19 +1,23 @@
+// server/src/index.js
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
+const { initScheduledTasks } = require("./tasks/scheduledTasks");
 
 const startServer = async () => {
   const app = express();
   const PORT = process.env.PORT || 5000;
 
-  // Attendre la connexion à MongoDB
   const isConnected = await connectDB();
   if (!isConnected) {
     console.error("Failed to connect to MongoDB. Exiting...");
     process.exit(1);
   }
+
+  // Initialiser les tâches planifiées
+  initScheduledTasks();
 
   app.use(cors());
   app.use(express.json());
@@ -29,7 +33,6 @@ const startServer = async () => {
   return app;
 };
 
-// Démarrer le serveur
 if (process.env.NODE_ENV !== "test") {
   startServer();
 }
