@@ -14,6 +14,9 @@ export default function Login({ onLoginSuccess }) {
     try {
       const response = await authApi.login(credentials);
       const { token } = response.data;
+      if (!token) {
+        throw new Error("No token received");
+      }
       setAuthToken(token);
       localStorage.setItem("token", token);
       onLoginSuccess();

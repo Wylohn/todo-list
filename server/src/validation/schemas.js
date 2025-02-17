@@ -7,6 +7,7 @@ const todoSchema = Joi.object({
     "string.min": "Le titre doit contenir au moins 3 caractères",
     "string.max": "Le titre ne peut pas dépasser 100 caractères",
   }),
+  category: Joi.string().valid("A faire", "En cours", "Terminé"),
 });
 
 // Validation du schéma User

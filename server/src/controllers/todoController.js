@@ -13,6 +13,7 @@ exports.createTodo = async (req, res) => {
   try {
     const todo = new Todo({
       title: req.body.title,
+      category: req.body.category || "A faire",
     });
     const newTodo = await todo.save();
     res.status(201).json(newTodo);
@@ -37,7 +38,10 @@ exports.updateTodo = async (req, res) => {
   try {
     const todo = await Todo.findByIdAndUpdate(
       req.params.id,
-      { title: req.body.title },
+      {
+        title: req.body.title,
+        category: req.body.category,
+      },
       { new: true }
     );
     if (!todo) {

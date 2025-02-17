@@ -91,5 +91,18 @@ describe("Todo API", () => {
 
       expect(res.status).toBe(400);
     });
+    it("should create a todo with category", async () => {
+      const res = await request(app)
+        .post("/api/todos")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          title: "New todo",
+          category: "travail",
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body.title).toBe("New todo");
+      expect(res.body.category).toBe("travail");
+    });
   });
 });
